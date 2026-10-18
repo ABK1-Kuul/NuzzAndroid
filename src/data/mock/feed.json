@@ -1,0 +1,90 @@
+[
+  {
+    "id": "post_1",
+    "user": {
+      "id": "u_1",
+      "name": "Sarah Chen",
+      "username": "@sarahc",
+      "avatarUrl": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150",
+      "streakDays": 14,
+      "totalHours": 182
+    },
+    "subject": {
+      "id": "sub_coding",
+      "name": "Coding",
+      "icon": "code-slash",
+      "color": "brandPrimary"
+    },
+    "durationMinutes": 50,
+    "completedAt": 1729241400000,
+    "reflection": "Finished refactoring the timer engine with timestamp deltas! Feeling unstoppable today 🚀",
+    "cheersCount": 24,
+    "hasCheered": false
+  },
+  {
+    "id": "post_2",
+    "user": {
+      "id": "u_2",
+      "name": "Marcus Vance",
+      "username": "@marcus_v",
+      "avatarUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150",
+      "streakDays": 28,
+      "totalHours": 340
+    },
+    "subject": {
+      "id": "sub_math",
+      "name": "Mathematics",
+      "icon": "calculator",
+      "color": "brandSecondary"
+    },
+    "durationMinutes": 45,
+    "completedAt": 1729237800000,
+    "reflection": "Linear algebra eigenvalues review block done.",
+    "cheersCount": 18,
+    "hasCheered": true
+  },
+  {
+    "id": "post_3",
+    "user": {
+      "id": "u_3",
+      "name": "Elena Rostova",
+      "username": "@elenar",
+      "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150",
+      "streakDays": 7,
+      "totalHours": 95
+    },
+    "subject": {
+      "id": "sub_design",
+      "name": "UI/UX Design",
+      "icon": "color-palette",
+      "color": "brandAccent"
+    },
+    "durationMinutes": 30,
+    "completedAt": 1729234200000,
+    "reflection": "Prototyped dark mode micro-interactions for the battle room.",
+    "cheersCount": 31,
+    "hasCheered": false
+  },
+  {
+    "id": "post_4",
+    "user": {
+      "id": "u_4",
+      "name": "Liam Patel",
+      "username": "@liamp",
+      "avatarUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150",
+      "streakDays": 5,
+      "totalHours": 64
+    },
+    "subject": {
+      "id": "sub_reading",
+      "name": "Deep Reading",
+      "icon": "book",
+      "color": "statusSuccess"
+    },
+    "durationMinutes": 60,
+    "completedAt": 1729227000000,
+    "reflection": "Finished Chapter 4 of 'Designing Data-Intensive Applications'.",
+    "cheersCount": 12,
+    "hasCheered": false
+  }
+]

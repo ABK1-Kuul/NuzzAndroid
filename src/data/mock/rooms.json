@@ -1,0 +1,70 @@
+[
+  {
+    "id": "room_1",
+    "title": "Midnight Deep Work & Systems",
+    "subject": {
+      "id": "sub_coding",
+      "name": "Coding",
+      "icon": "code-slash",
+      "color": "brandPrimary"
+    },
+    "durationMinutes": 50,
+    "startTimestamp": 1729242000000,
+    "participants": [
+      {
+        "userId": "u_sarah",
+        "name": "Sarah Chen",
+        "avatarUrl": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150",
+        "status": "focusing",
+        "progress": 0.72,
+        "elapsedMinutes": 36
+      },
+      {
+        "userId": "u_marcus",
+        "name": "Marcus Vance",
+        "avatarUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150",
+        "status": "focusing",
+        "progress": 0.85,
+        "elapsedMinutes": 42
+      },
+      {
+        "userId": "u_current",
+        "name": "Alex Kuul (You)",
+        "avatarUrl": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150",
+        "status": "focusing",
+        "progress": 0.40,
+        "elapsedMinutes": 20
+      }
+    ]
+  },
+  {
+    "id": "room_2",
+    "title": "Calculus Exam Grind Battle ⚡",
+    "subject": {
+      "id": "sub_math",
+      "name": "Mathematics",
+      "icon": "calculator",
+      "color": "brandSecondary"
+    },
+    "durationMinutes": 45,
+    "startTimestamp": 1729243000000,
+    "participants": [
+      {
+        "userId": "u_elena",
+        "name": "Elena Rostova",
+        "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150",
+        "status": "focusing",
+        "progress": 0.50,
+        "elapsedMinutes": 22
+      },
+      {
+        "userId": "u_liam",
+        "name": "Liam Patel",
+        "avatarUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150",
+        "status": "break",
+        "progress": 0.30,
+        "elapsedMinutes": 15
+      }
+    ]
+  }
+]
