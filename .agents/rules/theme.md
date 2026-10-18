@@ -1,162 +1,37 @@
-# Rule: Theme & Design Tokens
+# Theme rules
 
-## Golden Rule
-**Zero hardcoded colors or ad-hoc style values in application code.**
-No component, screen, or style definition may contain raw hex values (`#FFFFFF`), rgb/rgba strings, or browser color names (`"red"`, `"blue"`). All visual styling must use tokens imported from the centralized theme system.
+All styling comes from `src/theme/`. No raw hex values, magic numbers or font names in components.
 
----
+## Look and feel (from the Nuzz web app)
+- Dark-first UI: near-black background, slightly lighter card surfaces with thin subtle borders, large rounded corners (cards ~20-24px radius, pills fully rounded).
+- One green accent for primary actions, active nav state, progress rings and positive states.
+- Orange for streak flames and the default avatar color. Gold for coins. Red-pink for notification badges.
+- Soft, generous spacing; bold, friendly sans-serif headings (the web app uses a DM Sans-like geometric sans). Use `DM Sans` via `@expo-google-fonts/dm-sans`.
+- Primary buttons are solid green with dark text and a subtle bottom edge (3D pressed feel).
 
-## 1. Design Token Specifications
-
-### 1.1 Color Tokens
-Colors are defined semantically to support seamless dark and light modes.
-
-```typescript
-export interface ColorTokens {
-  // Brand & Accents
-  brandPrimary: string;       // Nuzz energetic coral / orange (#FF5A36)
-  brandSecondary: string;     // Warm amber (#FFAA00)
-  brandAccent: string;        // Vibrant violet (#7C3AED)
-  
-  // Timer States
-  timerFocus: string;         // Active focus ring color (#FF5A36)
-  timerBreak: string;         // Rest / break interval color (#10B981)
-  timerLongBreak: string;     // Long break color (#06B6D4)
-  timerTrackBg: string;       // Unfilled ring background track
-  
-  // Backgrounds & Surfaces
-  bgPrimary: string;          // Screen background
-  bgSecondary: string;        // Secondary screen background
-  surfacePrimary: string;     // Card, container, modal surface
-  surfaceSecondary: string;   // Nested card, pill, tag background
-  surfaceElevated: string;    // Floating sheets, bottom nav, dropdowns
-  
-  // Text & Content
-  textPrimary: string;        // High-emphasis text, headlines, timer digits
-  textSecondary: string;      // Medium-emphasis text, labels, subtitles
-  textMuted: string;          // Low-emphasis text, placeholders, timestamps
-  textInverse: string;        // Text on inverted/brand backgrounds
-  
-  // Borders & Dividers
-  borderSubtle: string;       // Hairline borders, dividers
-  borderStrong: string;       // Active inputs, focused card borders
-  
-  // Status & Badges
-  statusSuccess: string;      // Completed session, streak milestone (#10B981)
-  statusWarning: string;      // Timer near finish, alert (#F59E0B)
-  statusError: string;        // Abandoned session, critical error (#EF4444)
-  statusInfo: string;         // Info badges, tips (#3B82F6)
-  
-  // Social & Gamification
-  streakFire: string;         // Streak badge fire glow (#FF3B30)
-  levelPill: string;          // User level indicator (#8B5CF6)
-}
-```
-
-### 1.2 Spacing Tokens
-Based on an 8-point grid (with 4-point micro-adjustments):
-```typescript
-export const spacing = {
-  none: 0,
-  xxs: 2,
-  xs: 4,
-  sm: 8,
-  md: 12,
-  lg: 16,
-  xl: 20,
-  xxl: 24,
-  '3xl': 32,
-  '4xl': 40,
-  '5xl': 48,
-  '6xl': 64,
-} as const;
-```
-
-### 1.3 Typography Tokens
-```typescript
-export const typography = {
-  fontFamily: {
-    regular: 'Inter-Regular',
-    medium: 'Inter-Medium',
-    semiBold: 'Inter-SemiBold',
-    bold: 'Inter-Bold',
-    mono: 'JetBrainsMono-Bold', // For timer digits & countdown numbers
-  },
-  fontSize: {
-    caption: 11,
-    bodySm: 13,
-    body: 15,
-    subtitle: 17,
-    title: 20,
-    heading: 26,
-    display: 34,
-    timerDigits: 56,          // Hero countdown display
-  },
-  lineHeight: {
-    caption: 14,
-    bodySm: 18,
-    body: 22,
-    subtitle: 24,
-    title: 28,
-    heading: 32,
-    display: 40,
-    timerDigits: 64,
-  },
-} as const;
-```
-
-### 1.4 Radii & Shape Tokens
-```typescript
-export const radii = {
-  none: 0,
-  xs: 4,
-  sm: 8,
-  md: 12,
-  lg: 16,
-  xl: 24,
-  full: 9999, // Pill buttons, circular avatars, round timer buttons
-} as const;
-```
-
----
-
-## 2. Usage Conventions
-
-### 2.1 Using Tokens in Components
-Always use the theme hook or theme object:
-```tsx
-// ✅ Correct
-import { useTheme } from '../theme';
-import { StyleSheet, Text, View } from 'react-native';
-
-export const StudyCard = ({ title, duration }: StudyCardProps) => {
-  const { colors, spacing, radii, typography } = useTheme();
-
-  return (
-    <View style={[styles.card, { backgroundColor: colors.surfacePrimary, borderRadius: radii.md, padding: spacing.lg }]}>
-      <Text style={[styles.title, { color: colors.textPrimary, fontSize: typography.fontSize.title }]}>
-        {title}
-      </Text>
-    </View>
-  );
+## Tokens: starting values (APPROXIMATE, verify against screenshots)
+`src/theme/colors.ts` must export at least:
+```ts
+export const colors = {
+  bg: '#0a0a0b',          // app background
+  surface: '#121214',     // cards (sample from screenshots and adjust)
+  surfaceAlt: '#18181b',  // nested cards / inputs
+  border: '#26262a',
+  text: '#f4f4f5',
+  textMuted: '#a1a1aa',
+  textFaint: '#71717a',
+  accent: '#6fc276',      // green: SAMPLE the real value from docs/screenshots
+  accentText: '#0a0a0b',
+  streak: '#f97316',
+  coin: '#f5b301',
+  danger: '#ef4444',
+  badge: '#f43f5e',
 };
 ```
+TASK for the agent in Phase 1: sample exact colors from the screenshots (view them, estimate pixel colors) and update this file. Record the final values in a comment.
 
-### 2.2 What NOT to Do
-```tsx
-// ❌ FORBIDDEN: Hardcoded hex colors
-backgroundColor: '#1E1E2E'
-
-// ❌ FORBIDDEN: Hardcoded named colors
-color: 'white'
-
-// ❌ FORBIDDEN: Arbitrary ad-hoc numbers for spacing
-padding: 13.5,
-marginHorizontal: 27
-```
-
----
-
-## 3. Enforcement
-- Run a static check: `grep -rE "#[0-9a-fA-F]{3,6}|rgba?\(" src/` must return zero results in component files.
-- All styles must type-check against the `Theme` schema.
+## Also required
+- `spacing` (4-pt scale), `radius`, `typography` (sizes, weights), `shadows`.
+- A `Gallery` dev screen (`app/dev/gallery.tsx`) that renders every component and token so visual drift is easy to spot.
+- Touch targets are at least 44x44. Respect safe areas on every screen.
+- Light theme is out of scope for the prototype (keep the token structure ready for it).

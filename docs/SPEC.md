@@ -1,130 +1,101 @@
-# Nuzz Android — Product Specification (SPEC.md)
+# SPEC: Nuzz Mobile Prototype
 
-## 1. Product Overview
-**Nuzz** is a social focus and study timer Android app built with Expo Router and React Native. It combines timestamp-accurate focus sessions with peer motivation, live study rooms, leaderboards, productivity heatmaps, and shared feeds.
+## 1. Product summary
+Nuzz is a social focus-timer app: users run timed focus sessions on a subject, build daily streaks, earn coins, see stats, climb leaderboards, and share progress in a feed. This prototype recreates the core experience as a mobile app on mock data to pitch to the Nuzz creator.
 
----
+Reference screenshots (web app): `docs/screenshots/01..10`. Adapt layouts for a phone; keep the brand look.
 
-## 2. Core Architectural Pillars
-1. **The Key Rule**: **Screens call repository functions ONLY.** When connecting to the real backend, only `src/data/repositories/` is modified; screens remain untouched.
-2. **Zero Hardcoded Colors**: All colors, typography, spacing, and border radii strictly reference tokens from `src/theme/`.
-3. **Timestamp-Based Timer Engine**: All active session times derive from wall-clock timestamps (`targetEndTimestamp - now()`) stored in `src/store/timer.ts`, adhering to Section 6 of [`.agents/rules/timer.md`](file:///c:/NuzzAndroid/.agents/rules/timer.md).
+## 2. Scope
+**In scope (6 screens + shell):** Home, Focus (setup + running + finished), Stats, Ranks (leaderboard), Rooms (browse shell), Profile/More (links to secondary screens as simple placeholders), bottom-tab navigation.
+**Out of scope (list as "Phase 2" in the pitch):** live video rooms, battles, moments/stories, buddies, tasks CRUD, plan/calendar, notifications center, real auth, payments (Nuzz Pro), desktop-only features (app blocking, timelapse, app-usage tracking), light theme.
 
----
+## 3. Navigation
+Bottom tabs: **Home, Focus, Rooms, Stats, Ranks**. Profile avatar top-right opens a Profile/More screen (placeholder rows for Tasks, Plan, Buddies, Notifications marked "Coming in phase 2").
+Focus tab: a prominent center action; starting a session pushes the Running screen full-screen (tabs hidden).
 
-## 3. Data Shapes & Contracts (`src/data/types.ts`)
-
-```typescript
-export interface User {
-  id: string;
-  name: string;
-  username: string;
-  avatarUrl: string;
-  streakDays: number;
-  totalHours: number;
-}
-
-export interface Subject {
-  id: string;
-  name: string;
-  icon: string;
-  colorToken: string;
-}
-
-export interface Session {
-  id: string;
-  userId: string;
-  subjectId: string;
-  durationMinutes: number;
-  startTimestamp: number;
-  endTimestamp: number;
-  status: 'completed' | 'abandoned';
-}
-
-export interface Post {
-  id: string;
-  user: User;
-  subject: Subject;
-  durationMinutes: number;
-  completedAt: number;
-  reflection?: string;
-  cheersCount: number;
-  hasCheered: boolean;
-}
-
-export interface LeaderboardEntry {
-  rank: number;
-  user: User;
-  focusMinutes: number;
-  change: number; // e.g., +2, 0, -1
-}
-
-export interface StatsData {
-  todayMinutes: number;
-  weekMinutes: number;
-  currentStreak: number;
-  bestStreak: number;
-  dailyHeatmap: { date: string; minutes: number }[];
-  subjectBreakdown: { subject: Subject; minutes: number }[];
-}
+## 4. Data types (`src/data/types.ts`)
+```ts
+export type UserSummary = { id: string; name: string; handle: string; color: string; streak: number; isOnline: boolean };
+export type Me = UserSummary & { bestStreak: number; coins: number; dailyGoalMin: number; focusedTodayMs: number; weekDays: boolean[] /* Mon..Sun goal met */ };
+export type Subject = { id: string; name: string; color: string };
+export type Session = { id: string; subjectId: string; plannedMs: number; focusedMs: number; startedAt: number; endedAt: number; completed: boolean; isPrivate: boolean };
+export type Post = { id: string; author: UserSummary; body: string; createdAt: number; cherishCount: number; commentCount: number; viewCount: number; cherishedByMe: boolean; followingAuthor: boolean };
+export type LeaderboardPeriod = 'today' | 'week' | 'lifetime';
+export type LeaderboardEntry = { rank: number; user: UserSummary; focusedMs: number };
+export type StatsSummary = {
+  weekMs: number; weekSessions: number; allTimeMs: number; allTimeSessions: number;
+  completedPct: number; coins: number;
+  bySubject: { subjectId: string; ms: number }[];
+  heatmap: { date: string /* YYYY-MM-DD */; ms: number }[]; // last 18 weeks
+};
+export type Room = { id: string; name: string; subject: string; memberCount: number; isPrivate: boolean };
+export type FocusingNow = { count: number; users: UserSummary[] };
 ```
 
----
+## 5. Screens and acceptance criteria
 
-## 4. Repository Function Contracts (`src/data/repositories/`)
+### 5.1 Home (ref: 01-home-feed.png)
+- Top: greeting/app logo, avatar button, notification bell with badge (taps to placeholder).
+- **Today card**: streak count + flame, coins pill, "today X / goal Y" progress bar, Mon-Sun day dots (today highlighted, met days filled).
+- **Plan your day** card with "Plan today" button (placeholder action).
+- **Focusing now** card: count + horizontal avatar strip with green presence dots.
+- Feed: Global / Following segmented control; post cards with avatar, name, @handle, time-ago, streak flame, Follow button, body text, cherish button with count (toggle, haptic), comment count, views.
+- Pull to refresh. Skeleton on load. Empty state for Following with no posts.
+- AC: scrolls smoothly with 20+ posts; cherish toggles optimistically; all colors from tokens.
 
-- **Feed Repository (`src/data/repositories/feed.ts`)**:
-  - `getFeed(page?: number): Promise<Post[]>`
-  - `cheerPost(postId: string): Promise<Post>`
-- **Stats Repository (`src/data/repositories/stats.ts`)**:
-  - `getStats(): Promise<StatsData>`
-- **Leaderboard Repository (`src/data/repositories/leaderboard.ts`)**:
-  - `getLeaderboard(period: 'daily' | 'weekly' | 'allTime'): Promise<LeaderboardEntry[]>`
-- **Session Repository (`src/data/repositories/session.ts`)**:
-  - `startSession(subjectId: string, durationMinutes: number): Promise<Session>`
-  - `completeSession(sessionId: string, reflection?: string): Promise<Session>`
-  - `abandonSession(sessionId: string): Promise<void>`
+### 5.2 Focus: setup (ref: 09-start-session.png)
+- Hours + minutes wheel picker (native-feeling, snaps, haptic tick). Default 25 min. Min 5 min, max 8 h.
+- Subject selector (bottom sheet) with colored dot; "New subject" inline creation (name + color).
+- Toggles: Pomodoro breaks, Private session. (No desktop-only toggles.)
+- Live preview text: "Ends ~HH:MM" and "+N coin(s), next at 15m".
+- Big green "Start focus" button.
+- AC: preview updates as the picker changes; start pushes Running screen.
 
----
+### 5.3 Focus: running and finished
+- Large progress ring (react-native-svg) with remaining time (mm:ss or h:mm:ss), subject chip, "ends at" text.
+- Pause/Resume and End buttons (End asks to confirm). Pomodoro phase label if enabled.
+- Keep screen awake while running (`expo-keep-awake`).
+- Finished screen: focused time, coins earned, streak status, "Share to feed" (adds a mock post) and "Done".
+- AC: follows `.agents/rules/timer.md` exactly, including backgrounding, kill/reopen, and the local notification.
 
-## 5. Screen Specifications & Acceptance Criteria
+### 5.4 Stats (ref: 06-stats.png)
+- "Focus today" big number with progress toward goal, streak and best, total focused hours.
+- 2x2 "At a glance" cards: This week, All time, Completed %, Coins.
+- "What you focus on": subject breakdown (horizontal bars or donut, using subject colors).
+- 18-week heatmap (SVG), 4 intensity levels using accent greens, horizontally scrollable if needed.
+- AC: fixtures give a realistic non-empty state; also implement the zero-data empty state shown in the reference.
 
-### Tab 1: Home (`app/(tabs)/index.tsx`)
-Friend focus feed and active streak highlights.
-- [ ] Calls `getFeed()` from repository on mount and pull-to-refresh.
-- [ ] Displays friend session cards with `Avatar`, `StreakBadge`, and `Card` components.
-- [ ] Optimistically updates cheer count when user taps cheer button.
-- [ ] No direct mock data imports.
+### 5.5 Ranks (ref: 07-leaderboard.png)
+- Segmented control: Today / This week / Lifetime; "N people" label.
+- Top 3 with medal styling (gold/silver/bronze) and the leader crown/tag; rows 4+ with rank, avatar, name, streak flame, focused time.
+- Current user's row pinned/highlighted when off-screen.
+- AC: switching period re-queries with a loading state; list virtualized.
 
-### Tab 2: Focus (`app/(tabs)/focus.tsx`)
-Timer setup and session launcher.
-- [ ] Displays duration selector (Pomodoro 25m, Deep Work 50m, Custom).
-- [ ] Displays subject selector pills (e.g. Coding, Math, Reading) loaded from repository.
-- [ ] Start button calls `startSession()` and navigates to `session/running.tsx`.
-- [ ] Renders circular progress preview using `Ring` component.
+### 5.6 Rooms (ref: 04-rooms.png)
+- Browse / My rooms tabs, Join with code, New room buttons.
+- Mock list of 4-6 rooms (name, subject, member count, lock icon for private); empty state per reference.
+- Tapping a room opens a simple "Room preview" screen with members and a "Join" button that is marked "Live video coming in phase 2".
+- AC: no real video or realtime.
 
-### Tab 3: Rooms (`app/(tabs)/rooms.tsx`)
-Live study rooms and friend focus battles.
-- [ ] Lists active public and friend rooms.
-- [ ] Shows participant avatars and live progress rings.
-- [ ] Allows joining or creating a study room.
+### 5.7 Profile/More
+- Avatar, name, handle, streak, coins, daily goal.
+- Rows linking to placeholders: Tasks, Plan, Study buddies, Notifications ("Coming in phase 2"). A "Download desktop app" row is not needed.
 
-### Tab 4: Stats (`app/(tabs)/stats.tsx`)
-Productivity statistics and consistency visualization.
-- [ ] Calls `getStats()` from repository.
-- [ ] Displays GitHub-style contribution `Heatmap` showing daily focus minutes.
-- [ ] Displays total hours, current streak, and subject breakdown bar chart.
+## 6. Mock data requirements
+- 25-30 fictional users, 3-5 subjects, 20 feed posts (varied length, some with streaks), 6 rooms, leaderboard of 30 people, 18 weeks of heatmap data.
+- Current user: "Alex", streak 5, 120 coins, goal 120 min, today 45 min.
 
-### Tab 5: Ranks (`app/(tabs)/ranks.tsx`)
-Competitive study leaderboards.
-- [ ] Calls `getLeaderboard(period)` with Daily / Weekly / All-Time tabs.
-- [ ] Renders top 3 podium followed by ranked list of users.
-- [ ] Highlights current user's position and rank change indicator.
+## 7. Build phases (one commit each)
+0. Foundation: scaffold, theme, fonts, tab navigation, base components, gallery screen
+1. Design system: sample colors from screenshots, finalize tokens and components
+2. Focus: setup, running, finished, timer store, tests, notification
+3. Stats
+4. Home
+5. Ranks and Rooms
+6. Polish: transitions, skeletons, empty states, icon, splash; EAS preview build; demo recording
 
-### Session Screen: Running Session (`app/session/running.tsx`)
-Fullscreen active focus countdown and ambient workspace.
-- [ ] Connected to `src/store/timer.ts` (timestamp-based countdown).
-- [ ] Hero countdown display with monospace digits (`MM:SS`).
-- [ ] Fullscreen animated `Ring` progress dial.
-- [ ] Pause / Resume / Abandon controls.
-- [ ] AppState listener triggers completion if backgrounded past `targetEndTimestamp`.
+## 8. Quality bar
+- Runs on a real Android and iOS device without red screens.
+- 60 fps scrolling on feed and leaderboard.
+- Typecheck, lint and tests clean.
+- No screen contains a hardcoded color, font size or fixture.
