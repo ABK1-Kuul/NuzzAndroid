@@ -5,7 +5,7 @@ Purpose: let the Nuzz creator install it on his phone and judge the mobile look 
 It runs on MOCK DATA only. No real backend exists yet. Everything must be easy to swap for a real API later.
 
 Read before any task: `docs/SPEC.md`, then every file in `.agents/rules/`.
-Visual references live in `docs/screenshots/` (web app screenshots). Match them, adapted for mobile.
+Visual references: `docs/screenshots-mobile/` (PRIMARY, real mobile layout) and `docs/screenshots/` (desktop web, secondary). Match the mobile ones closely. SPEC section 9 describes each one.
 
 ## Stack (do not change without asking)
 - Expo (current stable SDK), React Native, TypeScript (strict), Expo Router

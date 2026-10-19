@@ -28,7 +28,7 @@ export const colors = {
   badge: '#f43f5e',
 };
 ```
-TASK for the agent in Phase 1: sample exact colors from the screenshots (view them, estimate pixel colors) and update this file. Record the final values in a comment.
+TASK for the agent in Phase 1: sample exact colors from docs/screenshots-mobile (primary) and docs/screenshots (view them, estimate pixel colors) and update this file. Record the final values in a comment.
 
 ## Also required
 - `spacing` (4-pt scale), `radius`, `typography` (sizes, weights), `shadows`.

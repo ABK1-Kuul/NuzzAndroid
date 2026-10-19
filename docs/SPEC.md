@@ -3,15 +3,20 @@
 ## 1. Product summary
 Nuzz is a social focus-timer app: users run timed focus sessions on a subject, build daily streaks, earn coins, see stats, climb leaderboards, and share progress in a feed. This prototype recreates the core experience as a mobile app on mock data to pitch to the Nuzz creator.
 
-Reference screenshots (web app): `docs/screenshots/01..10`. Adapt layouts for a phone; keep the brand look.
+Reference screenshots:
+- **PRIMARY (mobile, authoritative):** `docs/screenshots-mobile/m01..m08`. These are the real Nuzz mobile layout (the PWA on a phone). Match them closely.
+- Secondary (desktop web): `docs/screenshots/01..10`. Use only for screens/features that have no mobile screenshot (Tasks, Plan, Buddies, Notifications).
+If the two disagree, the mobile screenshots win. See section 9 for mobile-specific details.
 
 ## 2. Scope
-**In scope (6 screens + shell):** Home, Focus (setup + running + finished), Stats, Ranks (leaderboard), Rooms (browse shell), Profile/More (links to secondary screens as simple placeholders), bottom-tab navigation.
-**Out of scope (list as "Phase 2" in the pitch):** live video rooms, battles, moments/stories, buddies, tasks CRUD, plan/calendar, notifications center, real auth, payments (Nuzz Pro), desktop-only features (app blocking, timelapse, app-usage tracking), light theme.
+**In scope (6 tabs + shell):** Home (header, stories row, feed), Focus (setup + running + finished, with Focus/Tasks/Plan segmented control where Tasks and Plan are simple placeholders), Rooms (browse shell), Stats, Ranks (leaderboard with podium), Profile, first-launch welcome sheet, bottom-tab navigation.
+**Visual-only (no real logic):** stories row (static avatars with streak badges, tap opens a simple placeholder), timelapse-style feed posts (generated placeholder image, "Timelapse" tag), notification bell (opens placeholder).
+**Out of scope (list as "Phase 2" in the pitch):** live video rooms, battles, real moments creation, buddies, tasks CRUD, plan/calendar editing, notifications center, real auth, payments (Nuzz Pro), desktop-only features (app blocking, real timelapse recording, app-usage tracking), light theme.
 
 ## 3. Navigation
-Bottom tabs: **Home, Focus, Rooms, Stats, Ranks**. Profile avatar top-right opens a Profile/More screen (placeholder rows for Tasks, Plan, Buddies, Notifications marked "Coming in phase 2").
-Focus tab: a prominent center action; starting a session pushes the Running screen full-screen (tabs hidden).
+Bottom tab bar with **6 tabs**: Home, Focus, Rooms, Stats, Ranks, Profile. The active tab shows a filled icon and a pill-shaped dark-green highlight behind icon + label; inactive tabs are muted outline icons with labels.
+Persistent top header on tab screens: left = streak pill (orange flame + count), center = Nuzz logo wordmark, right = context action (share icon on Rooms/Focus/Ranks/Stats; notification bell on Home).
+Starting a session pushes the Running screen full-screen (tab bar hidden).
 
 ## 4. Data types (`src/data/types.ts`)
 ```ts
@@ -99,3 +104,25 @@ export type FocusingNow = { count: number; users: UserSummary[] };
 - 60 fps scrolling on feed and leaderboard.
 - Typecheck, lint and tests clean.
 - No screen contains a hardcoded color, font size or fixture.
+
+## 9. Mobile reference details (from docs/screenshots-mobile)
+
+**m01 Welcome sheet (first launch only):** bottom sheet over a blurred app. Eyebrow "Welcome to Nuzz", headline "A focus timer you use with friends.", logo mascot (green rounded shape with two dark pause bars). Three rows with icon: Time your focus / Build a daily streak / Focus with friends. A note card: "This feed is people sharing focus sessions they just finished: proof of work, not scrolling." Buttons: primary green "Start focusing, it's free ->", outline "How it works", text "Just look around". Close X top-right. Show once, persist dismissal.
+
+**m02/m03 Home:** header (streak pill, logo, bell with ring outline). Stories row: first tile "Add moment" (dashed green ring, big "+" badge), then circles with gradient ring and a small orange flame badge with the streak number. Below: Global/Following segmented control (active segment is a darker pill), "TODAY" section label, then post cards. Post card: avatar, name + orange flame and "12d", @handle and time-ago, white pill "Follow" button; a large rounded media area with a "Timelapse" tag top-right and a timer overlay at the bottom ("00:25:5x", subject, "26m today") with a thin progress line; below it a big duration ("2h") and a green chip "Hit 2h goal". A floating green "Post" button (pen icon) sits bottom-right above the tab bar. The dismissible "New here? Nuzz is a focus timer" explainer card (m02) can appear between stories and the segmented control for new users.
+Mock media: generate placeholder visuals (gradients/abstract shapes). Never use real people's photos.
+
+**m04 Focus setup:** top segmented control Focus / Tasks / Plan (Tasks and Plan show a simple "Coming in phase 2" empty state). A large rounded card with the wheel picker: hours column (left) and minutes column (right), selected row highlighted in a lighter pill, numbers fading above and below. Under it a centered line: clock icon "Ends 12:47" and gold coin "+1". Then a grouped list card: Subject (purple icon, current subject, chevron), Private session (toggle; helper text "Shows on the feed when you finish"), Pomodoro breaks (red icon, toggle; helper text "Too short for breaks" when duration is short, otherwise describe the cycle). A big green "Start focus" button must be reachable (list scrolls above the tab bar).
+
+**m05 Rooms:** header share icon on the right. Two large action cards side by side: "New room / Host a focus session" (green plus icon) and "Join with code / Got an invite?" (indigo lock-key icon). Browse / My Rooms segmented control. Empty state card: icon, "No open rooms right now", "Start one: whoever drops in focuses with you.", green pill button "+ Create a room". With mock data also show a populated list.
+
+**m06 Stats:** "Focus today" label in green, huge "0m" (use real value from mock), thin progress bar, "2h to your 2h goal", streak (red flame) and total focused (yellow bolt) metrics, "AT A GLANCE" label, 2x2 cards (This week with a mini 7-bar graphic, All time with a line graphic, Completed with a ring, Coins with a coin icon and "Save a streak" hint). Below the fold: subject breakdown and the heatmap.
+
+**m07 Ranks:** Today / This week / Lifetime segmented control, "90 people" label. "TOP PERFORMERS · TODAY" card with a podium: #1 centered and larger with a crown, #2 left and #3 right, each with avatar, rank badge (gold/silver/bronze), name and time. Below, a list card with rank number, avatar, name, "3h 20m today" subtitle and orange streak "1d" on the right.
+
+**m08 Profile:** top-right share and settings icons. Large avatar (initial on orange circle), @handle, display name, bio, location and "Joined Oct 2026". Stats row: following, followers, streak, focused hours. Buttons: "Edit profile" (wide, dark) and a share icon button. "No achievements yet >" row. Tab icons row below: Stats (active, underlined), Activity, Followers, Following. "LAST 26 WEEKS" heatmap with month labels (Jul, Aug, Sep, Oct). Implement Stats tab fully; the other three tabs can be simple lists from mock data.
+
+**Common UI details:** cards are dark gray with generous radius; segmented controls are pill-shaped with a darker active segment; primary buttons are green with dark text; the streak pill in the header is dark with an orange flame. Respect Android and iOS safe areas (status bar, gesture bar).
+
+## 10. Why native (include in the creator pitch)
+The PWA already works, so the pitch must show what native adds: reliable background timer plus end-of-session notifications, lock-screen/Live Activity timer, home-screen widgets (streak, today's focus), haptics, camera access for timelapse and moments, App Store and Play Store presence and discoverability, push notifications that actually deliver. The prototype should demonstrate at least: the timer surviving backgrounding, the end-of-session notification, and haptics on the wheel picker.
