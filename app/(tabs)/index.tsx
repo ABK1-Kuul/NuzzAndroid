@@ -3,13 +3,14 @@ import { View, Text, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link } from 'expo-router';
 import { useTheme } from '../../src/theme';
-import { Button } from '../../src/components';
+import { Button, Header } from '../../src/components';
 
 export default function HomeScreen() {
   const { colors, spacing, typography } = useTheme();
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.bg }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.bg }]} edges={['bottom']}>
+      <Header rightAction="bell" />
       <View style={[styles.content, { padding: spacing.xl }]}>
         <Text
           style={[

@@ -10,6 +10,7 @@ export const colors = {
   textMuted: '#a1a1aa',   // secondary / placeholder text
   textFaint: '#71717a',   // low-emphasis / timestamps
   accent: '#6fc276',      // primary green accent for actions, rings, active tab
+  accentMuted: 'rgba(111, 194, 118, 0.2)', // pill highlight behind active tab
   accentText: '#0a0a0b',  // text on accent button
   streak: '#f97316',      // streak flame orange
   coin: '#f5b301',        // coin gold

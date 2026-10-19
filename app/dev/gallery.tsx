@@ -8,7 +8,16 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { useTheme, ColorKey } from '../../src/theme';
-import { Card, Button, Avatar, Pill, StreakBadge } from '../../src/components';
+import {
+  Card,
+  Button,
+  Avatar,
+  Pill,
+  StreakBadge,
+  Header,
+  SegmentedControl,
+  BottomSheet,
+} from '../../src/components';
 
 export default function GalleryScreen() {
   const { colors, spacing, radius, typography } = useTheme();
@@ -16,6 +25,9 @@ export default function GalleryScreen() {
 
   const [activeTab, setActiveTab] = useState<'global' | 'following'>('global');
   const [clickCount, setClickCount] = useState(0);
+  const [selectedSegment2, setSelectedSegment2] = useState(0);
+  const [selectedSegment3, setSelectedSegment3] = useState(0);
+  const [sheetVisible, setSheetVisible] = useState(false);
 
   const colorEntries = Object.entries(colors) as [ColorKey, string][];
 
@@ -407,7 +419,137 @@ export default function GalleryScreen() {
             </Text>
           </Card>
         </Card>
+
+        {/* 8. Persistent Header */}
+        <Text
+          style={[
+            styles.sectionTitle,
+            {
+              color: colors.accent,
+              fontSize: typography.fontSize.xs,
+              fontFamily: typography.fontFamily.bold,
+              marginBottom: spacing.sm,
+            },
+          ]}
+        >
+          PERSISTENT HEADER (TAB SCREENS)
+        </Text>
+        <Card style={{ marginBottom: spacing.xl, padding: 0, overflow: 'hidden' }}>
+          <Header streak={5} rightAction="bell" />
+          <View style={{ borderTopWidth: 1, borderColor: colors.border }}>
+            <Header streak={12} rightAction="share" />
+          </View>
+          <View style={{ borderTopWidth: 1, borderColor: colors.border }}>
+            <Header streak={42} rightAction="profile" />
+          </View>
+        </Card>
+
+        {/* 9. Segmented Control */}
+        <Text
+          style={[
+            styles.sectionTitle,
+            {
+              color: colors.accent,
+              fontSize: typography.fontSize.xs,
+              fontFamily: typography.fontFamily.bold,
+              marginBottom: spacing.sm,
+            },
+          ]}
+        >
+          SEGMENTED CONTROLS
+        </Text>
+        <Card style={{ marginBottom: spacing.xl }}>
+          <Text
+            style={{
+              color: colors.textFaint,
+              fontSize: typography.fontSize.xs,
+              marginBottom: spacing.xs,
+            }}
+          >
+            2-Item (Global / Following):
+          </Text>
+          <SegmentedControl
+            values={['Global', 'Following']}
+            selectedIndex={selectedSegment2}
+            onChange={setSelectedSegment2}
+            style={{ marginBottom: spacing.lg }}
+          />
+
+          <Text
+            style={{
+              color: colors.textFaint,
+              fontSize: typography.fontSize.xs,
+              marginBottom: spacing.xs,
+            }}
+          >
+            3-Item (Focus / Tasks / Plan):
+          </Text>
+          <SegmentedControl
+            values={['Focus', 'Tasks', 'Plan']}
+            selectedIndex={selectedSegment3}
+            onChange={setSelectedSegment3}
+          />
+        </Card>
+
+        {/* 10. Bottom Sheet */}
+        <Text
+          style={[
+            styles.sectionTitle,
+            {
+              color: colors.accent,
+              fontSize: typography.fontSize.xs,
+              fontFamily: typography.fontFamily.bold,
+              marginBottom: spacing.sm,
+            },
+          ]}
+        >
+          BOTTOM SHEET
+        </Text>
+        <Card style={{ marginBottom: spacing.xl }}>
+          <Button
+            title="Open Demo Bottom Sheet"
+            variant="secondary"
+            size="md"
+            onPress={() => setSheetVisible(true)}
+          />
+        </Card>
       </ScrollView>
+
+      {/* Bottom Sheet Demo */}
+      <BottomSheet
+        visible={sheetVisible}
+        onClose={() => setSheetVisible(false)}
+        title="Welcome to Nuzz"
+      >
+        <View style={{ paddingVertical: spacing.md }}>
+          <Text
+            style={{
+              color: colors.text,
+              fontSize: typography.fontSize.base,
+              fontFamily: typography.fontFamily.medium,
+              marginBottom: spacing.sm,
+            }}
+          >
+            A focus timer you use with friends.
+          </Text>
+          <Text
+            style={{
+              color: colors.textMuted,
+              fontSize: typography.fontSize.sm,
+              lineHeight: 20,
+              marginBottom: spacing.xl,
+            }}
+          >
+            This feed is people sharing focus sessions they just finished: proof of work, not scrolling.
+          </Text>
+          <Button
+            title="Start focusing — it's free →"
+            variant="primary"
+            size="lg"
+            onPress={() => setSheetVisible(false)}
+          />
+        </View>
+      </BottomSheet>
     </SafeAreaView>
   );
 }
