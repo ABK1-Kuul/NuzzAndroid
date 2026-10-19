@@ -9,6 +9,7 @@ describe('Theme Foundation', () => {
     expect(colors.coin).toMatch(/^#[0-9a-fA-F]{6}$/);
     expect(colors.danger).toMatch(/^#[0-9a-fA-F]{6}$/);
     expect(colors.badge).toMatch(/^#[0-9a-fA-F]{6}$/);
+    expect(colors.accentMuted).toBeDefined();
   });
 
   it('uses 4-pt grid spacing tokens', () => {
