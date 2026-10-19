@@ -2,14 +2,23 @@ import { colors, spacing, radius, typography } from '../src/theme';
 
 describe('Theme Foundation', () => {
   it('exports required color tokens with valid hex values', () => {
-    expect(colors.bg).toMatch(/^#[0-9a-fA-F]{6}$/);
-    expect(colors.surface).toMatch(/^#[0-9a-fA-F]{6}$/);
-    expect(colors.accent).toMatch(/^#[0-9a-fA-F]{6}$/);
-    expect(colors.streak).toMatch(/^#[0-9a-fA-F]{6}$/);
-    expect(colors.coin).toMatch(/^#[0-9a-fA-F]{6}$/);
-    expect(colors.danger).toMatch(/^#[0-9a-fA-F]{6}$/);
-    expect(colors.badge).toMatch(/^#[0-9a-fA-F]{6}$/);
-    expect(colors.accentMuted).toBeDefined();
+    expect(colors.bg).toBe('#0a0a0a');
+    expect(colors.surface).toBe('#101010');
+    expect(colors.surfaceAlt).toBe('#141416');
+    expect(colors.border).toBe('#28282a');
+    expect(colors.text).toBe('#f2f1f6');
+    expect(colors.textMuted).toBe('#989899');
+    expect(colors.textFaint).toBe('#6e7175');
+    expect(colors.accent).toBe('#77c26f');
+    expect(colors.accentDarkEdge).toBe('#569851');
+    expect(colors.accentMuted).toBe('#232f23');
+    expect(colors.streak).toBe('#fab162');
+    expect(colors.coin).toBe('#f4c94b');
+    expect(colors.avatarOrange).toBe('#ef6c02');
+    expect(colors.badge).toBe('#e2080b');
+    expect(colors.toggleOffTrack).toBe('#3c3c3e');
+    expect(colors.toggleOffThumb).toBe('#ededed');
+    expect(colors.segmentActive).toBe('#101010');
   });
 
   it('uses 4-pt grid spacing tokens', () => {

@@ -17,7 +17,24 @@ import {
   Header,
   SegmentedControl,
   BottomSheet,
+  Toggle,
+  ListRow,
+  SectionLabel,
+  EmptyState,
+  Skeleton,
+  ProgressBar,
 } from '../../src/components';
+import {
+  Timer,
+  Users,
+  BarChart2,
+  Trophy,
+  User,
+  Home,
+  BookOpen,
+  Lock,
+  BellOff,
+} from 'lucide-react-native';
 
 export default function GalleryScreen() {
   const { colors, spacing, radius, typography } = useTheme();
@@ -28,6 +45,8 @@ export default function GalleryScreen() {
   const [selectedSegment2, setSelectedSegment2] = useState(0);
   const [selectedSegment3, setSelectedSegment3] = useState(0);
   const [sheetVisible, setSheetVisible] = useState(false);
+  const [toggle1, setToggle1] = useState(false);
+  const [toggle2, setToggle2] = useState(true);
 
   const colorEntries = Object.entries(colors) as [ColorKey, string][];
 
@@ -491,7 +510,244 @@ export default function GalleryScreen() {
           />
         </Card>
 
-        {/* 10. Bottom Sheet */}
+        {/* 10. Tab Bar Active Icons (Non-Blobbing) */}
+        <Text
+          style={[
+            styles.sectionTitle,
+            {
+              color: colors.accent,
+              fontSize: typography.fontSize.xs,
+              fontFamily: typography.fontFamily.bold,
+              marginBottom: spacing.sm,
+            },
+          ]}
+        >
+          TAB BAR ACTIVE ICONS (DETAIL PRESERVED)
+        </Text>
+        <Card style={{ marginBottom: spacing.xl }}>
+          <Text
+            style={{
+              color: colors.textMuted,
+              fontSize: typography.fontSize.xs,
+              marginBottom: spacing.md,
+            }}
+          >
+            Active icons in dark green pill (#232f23) maintaining interior cutouts:
+          </Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
+            <View style={{ alignItems: 'center' }}>
+              <View style={[styles.tabPreviewPill, { backgroundColor: colors.accentMuted, borderRadius: radius.pill, paddingHorizontal: spacing.md, paddingVertical: 4 }]}>
+                <Home color={colors.text} strokeWidth={2.5} size={20} />
+              </View>
+              <Text style={{ color: colors.text, fontSize: 10, marginTop: 4, fontFamily: typography.fontFamily.medium }}>Home</Text>
+            </View>
+            <View style={{ alignItems: 'center' }}>
+              <View style={[styles.tabPreviewPill, { backgroundColor: colors.accentMuted, borderRadius: radius.pill, paddingHorizontal: spacing.md, paddingVertical: 4 }]}>
+                <Timer color={colors.text} strokeWidth={2.5} size={20} />
+              </View>
+              <Text style={{ color: colors.text, fontSize: 10, marginTop: 4, fontFamily: typography.fontFamily.medium }}>Focus</Text>
+            </View>
+            <View style={{ alignItems: 'center' }}>
+              <View style={[styles.tabPreviewPill, { backgroundColor: colors.accentMuted, borderRadius: radius.pill, paddingHorizontal: spacing.md, paddingVertical: 4 }]}>
+                <Users color={colors.text} strokeWidth={2.5} size={20} />
+              </View>
+              <Text style={{ color: colors.text, fontSize: 10, marginTop: 4, fontFamily: typography.fontFamily.medium }}>Rooms</Text>
+            </View>
+            <View style={{ alignItems: 'center' }}>
+              <View style={[styles.tabPreviewPill, { backgroundColor: colors.accentMuted, borderRadius: radius.pill, paddingHorizontal: spacing.md, paddingVertical: 4 }]}>
+                <BarChart2 color={colors.text} strokeWidth={2.5} size={20} />
+              </View>
+              <Text style={{ color: colors.text, fontSize: 10, marginTop: 4, fontFamily: typography.fontFamily.medium }}>Stats</Text>
+            </View>
+            <View style={{ alignItems: 'center' }}>
+              <View style={[styles.tabPreviewPill, { backgroundColor: colors.accentMuted, borderRadius: radius.pill, paddingHorizontal: spacing.md, paddingVertical: 4 }]}>
+                <Trophy color={colors.text} strokeWidth={2.5} size={20} />
+              </View>
+              <Text style={{ color: colors.text, fontSize: 10, marginTop: 4, fontFamily: typography.fontFamily.medium }}>Ranks</Text>
+            </View>
+            <View style={{ alignItems: 'center' }}>
+              <View style={[styles.tabPreviewPill, { backgroundColor: colors.accentMuted, borderRadius: radius.pill, paddingHorizontal: spacing.md, paddingVertical: 4 }]}>
+                <User color={colors.text} strokeWidth={2.5} size={20} />
+              </View>
+              <Text style={{ color: colors.text, fontSize: 10, marginTop: 4, fontFamily: typography.fontFamily.medium }}>Profile</Text>
+            </View>
+          </View>
+        </Card>
+
+        {/* 11. Toggles */}
+        <Text
+          style={[
+            styles.sectionTitle,
+            {
+              color: colors.accent,
+              fontSize: typography.fontSize.xs,
+              fontFamily: typography.fontFamily.bold,
+              marginBottom: spacing.sm,
+            },
+          ]}
+        >
+          TOGGLE SWITCHES
+        </Text>
+        <Card style={{ marginBottom: spacing.xl }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.md }}>
+            <Text style={{ color: colors.text, fontSize: typography.fontSize.sm, fontFamily: typography.fontFamily.medium }}>
+              Interactive Toggle (Off)
+            </Text>
+            <Toggle value={toggle1} onValueChange={setToggle1} />
+          </View>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.md }}>
+            <Text style={{ color: colors.text, fontSize: typography.fontSize.sm, fontFamily: typography.fontFamily.medium }}>
+              Interactive Toggle (On)
+            </Text>
+            <Toggle value={toggle2} onValueChange={setToggle2} />
+          </View>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Text style={{ color: colors.textMuted, fontSize: typography.fontSize.sm, fontFamily: typography.fontFamily.regular }}>
+              Disabled Toggle
+            </Text>
+            <Toggle value={false} onValueChange={() => {}} disabled />
+          </View>
+        </Card>
+
+        {/* 12. List Rows */}
+        <Text
+          style={[
+            styles.sectionTitle,
+            {
+              color: colors.accent,
+              fontSize: typography.fontSize.xs,
+              fontFamily: typography.fontFamily.bold,
+              marginBottom: spacing.sm,
+            },
+          ]}
+        >
+          LIST ROWS (FOCUS SETUP PATTERN)
+        </Text>
+        <Card style={{ padding: 0, marginBottom: spacing.xl, overflow: 'hidden' }}>
+          <ListRow
+            title="Subject"
+            rightText="Planning"
+            icon={<BookOpen color="#a855f7" size={18} />}
+            iconBgColor="#2e1065"
+            onPress={() => {}}
+            hasDivider
+          />
+          <ListRow
+            title="Private session"
+            subtitle="Shows on the feed when you finish"
+            icon={<Lock color="#3b82f6" size={18} />}
+            iconBgColor="#1e3a8a"
+            right={<Toggle value={toggle1} onValueChange={setToggle1} />}
+            hasDivider
+          />
+          <ListRow
+            title="Pomodoro breaks"
+            subtitle="Too short for breaks"
+            icon={<Timer color="#ef4444" size={18} />}
+            iconBgColor="#450a0a"
+            right={<Toggle value={false} onValueChange={() => {}} disabled />}
+          />
+        </Card>
+
+        {/* 13. Section Labels */}
+        <Text
+          style={[
+            styles.sectionTitle,
+            {
+              color: colors.accent,
+              fontSize: typography.fontSize.xs,
+              fontFamily: typography.fontFamily.bold,
+              marginBottom: spacing.sm,
+            },
+          ]}
+        >
+          SECTION LABELS
+        </Text>
+        <Card style={{ marginBottom: spacing.xl }}>
+          <SectionLabel title="Today" />
+          <SectionLabel title="At a glance" />
+          <SectionLabel
+            title="Top performers · Today"
+            rightAction={<Text style={{ color: colors.textMuted, fontSize: typography.fontSize.xs }}>90 people</Text>}
+          />
+          <SectionLabel title="Last 26 weeks" style={{ marginBottom: 0 }} />
+        </Card>
+
+        {/* 14. Progress Bars */}
+        <Text
+          style={[
+            styles.sectionTitle,
+            {
+              color: colors.accent,
+              fontSize: typography.fontSize.xs,
+              fontFamily: typography.fontFamily.bold,
+              marginBottom: spacing.sm,
+            },
+          ]}
+        >
+          PROGRESS BARS
+        </Text>
+        <Card style={{ marginBottom: spacing.xl }}>
+          <Text style={{ color: colors.textMuted, fontSize: typography.fontSize.xs, marginBottom: spacing.xs }}>25% Progress:</Text>
+          <ProgressBar progress={0.25} style={{ marginBottom: spacing.md }} />
+
+          <Text style={{ color: colors.textMuted, fontSize: typography.fontSize.xs, marginBottom: spacing.xs }}>75% Goal Progress (Height 6px):</Text>
+          <ProgressBar progress={0.75} height={6} style={{ marginBottom: spacing.md }} />
+
+          <Text style={{ color: colors.textMuted, fontSize: typography.fontSize.xs, marginBottom: spacing.xs }}>100% Completed:</Text>
+          <ProgressBar progress={1.0} height={4} />
+        </Card>
+
+        {/* 15. Skeletons */}
+        <Text
+          style={[
+            styles.sectionTitle,
+            {
+              color: colors.accent,
+              fontSize: typography.fontSize.xs,
+              fontFamily: typography.fontFamily.bold,
+              marginBottom: spacing.sm,
+            },
+          ]}
+        >
+          SKELETON LOADERS
+        </Text>
+        <Card style={{ marginBottom: spacing.xl }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.md }}>
+            <Skeleton width={44} height={44} borderRadius={radius.pill} style={{ marginRight: spacing.md }} />
+            <View style={{ flex: 1, gap: 6 }}>
+              <Skeleton width="60%" height={14} />
+              <Skeleton width="35%" height={10} />
+            </View>
+          </View>
+          <Skeleton width="100%" height={60} borderRadius={radius.md} />
+        </Card>
+
+        {/* 16. Empty State */}
+        <Text
+          style={[
+            styles.sectionTitle,
+            {
+              color: colors.accent,
+              fontSize: typography.fontSize.xs,
+              fontFamily: typography.fontFamily.bold,
+              marginBottom: spacing.sm,
+            },
+          ]}
+        >
+          EMPTY STATE
+        </Text>
+        <View style={{ marginBottom: spacing.xl }}>
+          <EmptyState
+            icon={<BellOff color={colors.textMuted} size={24} />}
+            title="No open rooms right now"
+            description="Start one: whoever drops in focuses with you."
+            actionLabel="+ Create a room"
+            onAction={() => {}}
+          />
+        </View>
+
+        {/* 17. Bottom Sheet */}
         <Text
           style={[
             styles.sectionTitle,
@@ -607,5 +863,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 8,
+  },
+  tabPreviewPill: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    minWidth: 44,
+    height: 28,
   },
 });

@@ -5,7 +5,7 @@ import { Home, Timer, Users, BarChart2, Trophy, User } from 'lucide-react-native
 import { useTheme } from '../../src/theme';
 
 interface TabBarIconProps {
-  Icon: React.ComponentType<{ color: string; size: number; fill?: string }>;
+  Icon: React.ComponentType<{ color: string; size: number; strokeWidth?: number; fill?: string }>;
   focused: boolean;
   color?: unknown;
 }
@@ -32,7 +32,7 @@ function TabBarIcon({ Icon, focused, color }: TabBarIconProps) {
     >
       <Icon
         color={iconColor}
-        fill={focused ? iconColor : 'none'}
+        strokeWidth={focused ? 2.5 : 2}
         size={20}
       />
     </View>

@@ -122,15 +122,8 @@ export function Header({
         style,
       ]}
     >
-      {/* Left Slot: Streak Badge */}
-      <View style={styles.leftSlot}>
-        <Pressable onPress={onPressStreak} disabled={!onPressStreak}>
-          <StreakBadge count={streak} size="sm" />
-        </Pressable>
-      </View>
-
-      {/* Center Slot: Nuzz Wordmark */}
-      <View style={styles.centerSlot}>
+      {/* Absolutely Centered Wordmark (unaffected by left or right slot widths) */}
+      <View style={styles.absoluteCenter} pointerEvents="box-none">
         <View style={styles.wordmarkRow}>
           {/* Mascot icon: green rounded pill with two pause dots */}
           <View
@@ -161,6 +154,13 @@ export function Header({
         </View>
       </View>
 
+      {/* Left Slot: Streak Badge */}
+      <View style={styles.leftSlot}>
+        <Pressable onPress={onPressStreak} disabled={!onPressStreak}>
+          <StreakBadge count={streak} size="sm" />
+        </Pressable>
+      </View>
+
       {/* Right Slot: Context Actions */}
       <View style={styles.rightSlot}>{renderRight()}</View>
     </View>
@@ -173,16 +173,29 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     zIndex: 10,
+    position: 'relative',
+  },
+  absoluteCenter: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 1,
   },
   leftSlot: {
     minWidth: 50,
     alignItems: 'flex-start',
     justifyContent: 'center',
+    zIndex: 2,
   },
-  centerSlot: {
-    flex: 1,
-    alignItems: 'center',
+  rightSlot: {
+    minWidth: 50,
+    alignItems: 'flex-end',
     justifyContent: 'center',
+    zIndex: 2,
   },
   wordmarkRow: {
     flexDirection: 'row',
@@ -204,11 +217,6 @@ const styles = StyleSheet.create({
   },
   logoText: {
     letterSpacing: -0.5,
-  },
-  rightSlot: {
-    minWidth: 50,
-    alignItems: 'flex-end',
-    justifyContent: 'center',
   },
   rightGroup: {
     flexDirection: 'row',

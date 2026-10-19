@@ -34,7 +34,7 @@ export function Button({
   textStyle,
   icon,
 }: ButtonProps) {
-  const { colors, spacing, radius, typography, shadows } = useTheme();
+  const { colors, spacing, radius, typography } = useTheme();
 
   const isPrimary = variant === 'primary';
   const isSecondary = variant === 'secondary';
@@ -57,6 +57,8 @@ export function Button({
     ? colors.textMuted
     : colors.text;
 
+  const spinnerColor = isPrimary ? colors.accentText : textColor;
+
   return (
     <Pressable
       onPress={onPress}
@@ -71,7 +73,8 @@ export function Button({
         },
         isPrimary && {
           backgroundColor: colors.accent,
-          ...(pressed ? {} : shadows.buttonPrimaryEdge),
+          borderBottomWidth: pressed ? 1 : 3,
+          borderBottomColor: colors.accentDarkEdge,
           transform: [{ translateY: pressed ? 2 : 0 }],
         },
         isSecondary && {
@@ -86,7 +89,7 @@ export function Button({
       ]}
     >
       {loading ? (
-        <ActivityIndicator color={textColor} size="small" />
+        <ActivityIndicator color={spinnerColor} size="small" />
       ) : (
         <View style={styles.content}>
           {icon ? <View style={{ marginRight: spacing.xs }}>{icon}</View> : null}

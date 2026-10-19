@@ -11,7 +11,7 @@ export const shadows = {
   },
   buttonPrimaryEdge: {
     borderBottomWidth: 3,
-    borderBottomColor: '#529657', // subtle pressed bottom lip for primary green button
+    borderBottomColor: colors.accentDarkEdge, // 3D pressed bottom lip for primary green button
   },
 } as const;
 
