@@ -1,7 +1,11 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useTheme } from '../theme';
-import { HeatmapDay } from '../data/types';
+
+export interface HeatmapDay {
+  date: string;
+  intensity: number; // 0..4
+}
 
 interface HeatmapProps {
   days: HeatmapDay[];
@@ -13,15 +17,15 @@ export function Heatmap({ days }: HeatmapProps) {
   const getCellColor = (intensity: number) => {
     switch (intensity) {
       case 1:
-        return 'rgba(255, 90, 54, 0.25)';
+        return 'rgba(111, 194, 118, 0.25)';
       case 2:
-        return 'rgba(255, 90, 54, 0.50)';
+        return 'rgba(111, 194, 118, 0.50)';
       case 3:
-        return 'rgba(255, 90, 54, 0.75)';
+        return 'rgba(111, 194, 118, 0.75)';
       case 4:
-        return colors.brandPrimary;
+        return colors.accent;
       default:
-        return colors.surfaceSecondary;
+        return colors.surfaceAlt;
     }
   };
 
@@ -36,7 +40,7 @@ export function Heatmap({ days }: HeatmapProps) {
                 {
                   backgroundColor: getCellColor(day.intensity),
                   borderRadius: radius.xs,
-                  borderColor: colors.borderSubtle,
+                  borderColor: colors.border,
                 },
               ]}
             />
@@ -45,7 +49,7 @@ export function Heatmap({ days }: HeatmapProps) {
                 styles.dayLabel,
                 {
                   color: colors.textMuted,
-                  fontSize: typography.fontSizes.caption - 1,
+                  fontSize: typography.fontSize.xs - 1,
                   marginTop: spacing.xxs,
                 },
               ]}

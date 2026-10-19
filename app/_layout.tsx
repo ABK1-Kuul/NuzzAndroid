@@ -1,27 +1,52 @@
+import React, { useEffect } from 'react';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import * as SplashScreen from 'expo-splash-screen';
+import {
+  useFonts,
+  DMSans_400Regular,
+  DMSans_500Medium,
+  DMSans_700Bold,
+} from '@expo-google-fonts/dm-sans';
 import { useTheme } from '../src/theme';
 
+SplashScreen.preventAutoHideAsync();
+
 export default function RootLayout() {
-  const { colors, isDark } = useTheme();
+  const { colors } = useTheme();
+
+  const [fontsLoaded, fontError] = useFonts({
+    DMSans_400Regular,
+    DMSans_500Medium,
+    DMSans_700Bold,
+  });
+
+  useEffect(() => {
+    if (fontsLoaded || fontError) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, fontError]);
+
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
 
   return (
     <>
-      <StatusBar style={isDark ? 'light' : 'dark'} backgroundColor={colors.bgPrimary} />
+      <StatusBar style="light" />
       <Stack
         screenOptions={{
           headerShown: false,
-          contentStyle: { backgroundColor: colors.bgPrimary },
+          contentStyle: { backgroundColor: colors.bg },
           animation: 'fade',
         }}
       >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen
-          name="session/running"
+          name="dev/gallery"
           options={{
             headerShown: false,
-            presentation: 'fullScreenModal',
-            animation: 'slide_from_bottom',
+            presentation: 'modal',
           }}
         />
       </Stack>

@@ -2,31 +2,26 @@ import React from 'react';
 import { View, StyleSheet, ViewStyle, StyleProp } from 'react-native';
 import { useTheme } from '../theme';
 
-interface CardProps {
+export interface CardProps {
   children: React.ReactNode;
   style?: StyleProp<ViewStyle>;
-  variant?: 'primary' | 'secondary' | 'elevated';
+  variant?: 'surface' | 'surfaceAlt';
 }
 
-export function Card({ children, style, variant = 'primary' }: CardProps) {
+export function Card({ children, style, variant = 'surface' }: CardProps) {
   const { colors, spacing, radius } = useTheme();
 
-  const backgroundColor =
-    variant === 'elevated'
-      ? colors.surfaceElevated
-      : variant === 'secondary'
-      ? colors.surfaceSecondary
-      : colors.surfacePrimary;
+  const backgroundColor = variant === 'surfaceAlt' ? colors.surfaceAlt : colors.surface;
 
   return (
     <View
       style={[
-        styles.card,
+        styles.base,
         {
           backgroundColor,
-          borderRadius: radius.lg,
+          borderColor: colors.border,
+          borderRadius: radius.card,
           padding: spacing.lg,
-          borderColor: colors.borderSubtle,
         },
         style,
       ]}
@@ -37,7 +32,7 @@ export function Card({ children, style, variant = 'primary' }: CardProps) {
 }
 
 const styles = StyleSheet.create({
-  card: {
+  base: {
     borderWidth: 1,
     overflow: 'hidden',
   },

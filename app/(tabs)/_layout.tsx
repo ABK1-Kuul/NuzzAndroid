@@ -1,26 +1,28 @@
+import React from 'react';
 import { Tabs } from 'expo-router';
-import { Text } from 'react-native';
+import { Home, Play, Users, BarChart2, Trophy } from 'lucide-react-native';
 import { useTheme } from '../../src/theme';
 
 export default function TabLayout() {
-  const { colors, typography } = useTheme();
+  const { colors, typography, spacing } = useTheme();
 
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: colors.surfacePrimary,
-          borderTopColor: colors.borderSubtle,
+          backgroundColor: colors.surface,
+          borderTopColor: colors.border,
+          borderTopWidth: 1,
           height: 64,
-          paddingBottom: 8,
-          paddingTop: 8,
+          paddingBottom: spacing.sm,
+          paddingTop: spacing.xs,
         },
-        tabBarActiveTintColor: colors.brandPrimary,
+        tabBarActiveTintColor: colors.accent,
         tabBarInactiveTintColor: colors.textMuted,
         tabBarLabelStyle: {
-          fontSize: typography.fontSizes.caption,
-          fontWeight: typography.fontWeights.medium,
+          fontSize: typography.fontSize.xs,
+          fontFamily: typography.fontFamily.medium,
         },
       }}
     >
@@ -28,35 +30,35 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color }) => <Text style={{ fontSize: 20 }}>🏠</Text>,
+          tabBarIcon: ({ color, size }) => <Home color={color} size={size || 22} />,
         }}
       />
       <Tabs.Screen
         name="focus"
         options={{
           title: 'Focus',
-          tabBarIcon: ({ color }) => <Text style={{ fontSize: 20 }}>⏱️</Text>,
+          tabBarIcon: ({ color, size }) => <Play color={color} size={size || 22} />,
         }}
       />
       <Tabs.Screen
         name="rooms"
         options={{
           title: 'Rooms',
-          tabBarIcon: ({ color }) => <Text style={{ fontSize: 20 }}>🔥</Text>,
+          tabBarIcon: ({ color, size }) => <Users color={color} size={size || 22} />,
         }}
       />
       <Tabs.Screen
         name="stats"
         options={{
           title: 'Stats',
-          tabBarIcon: ({ color }) => <Text style={{ fontSize: 20 }}>📊</Text>,
+          tabBarIcon: ({ color, size }) => <BarChart2 color={color} size={size || 22} />,
         }}
       />
       <Tabs.Screen
         name="ranks"
         options={{
           title: 'Ranks',
-          tabBarIcon: ({ color }) => <Text style={{ fontSize: 20 }}>🏆</Text>,
+          tabBarIcon: ({ color, size }) => <Trophy color={color} size={size || 22} />,
         }}
       />
     </Tabs>

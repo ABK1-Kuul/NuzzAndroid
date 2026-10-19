@@ -1,31 +1,47 @@
+// src/theme/typography.ts
+// Typography tokens using DM Sans geometric sans-serif
+
+export const fontFamily = {
+  regular: 'DMSans_400Regular',
+  medium: 'DMSans_500Medium',
+  bold: 'DMSans_700Bold',
+} as const;
+
+export const fontSize = {
+  xs: 11,
+  sm: 13,
+  base: 15,
+  md: 17,
+  lg: 20,
+  xl: 24,
+  '2xl': 28,
+  '3xl': 34,
+  timer: 56,
+} as const;
+
+export const lineHeight = {
+  xs: 14,
+  sm: 18,
+  base: 22,
+  md: 24,
+  lg: 28,
+  xl: 32,
+  '2xl': 36,
+  '3xl': 40,
+  timer: 64,
+} as const;
+
+export const fontWeight = {
+  regular: '400',
+  medium: '500',
+  bold: '700',
+} as const;
+
 export const typography = {
-  fontSizes: {
-    caption: 11,
-    bodySm: 13,
-    body: 15,
-    subtitle: 17,
-    title: 20,
-    heading: 26,
-    display: 34,
-    timerDigits: 64, // Hero countdown numbers
-  },
-  lineHeights: {
-    caption: 14,
-    bodySm: 18,
-    body: 22,
-    subtitle: 24,
-    title: 28,
-    heading: 32,
-    display: 40,
-    timerDigits: 72,
-  },
-  fontWeights: {
-    regular: '400',
-    medium: '500',
-    semiBold: '600',
-    bold: '700',
-    heavy: '800',
-  } as const,
+  fontFamily,
+  fontSize,
+  lineHeight,
+  fontWeight,
 };
 
 export type Typography = typeof typography;

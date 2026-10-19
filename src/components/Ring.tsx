@@ -22,8 +22,8 @@ export function Ring({
 }: RingProps) {
   const { colors } = useTheme();
 
-  const activeColor = color || colors.brandPrimary;
-  const inactiveColor = trackColor || colors.timerTrackBg;
+  const activeColor = color || colors.accent;
+  const inactiveColor = trackColor || colors.surfaceAlt;
 
   const center = size / 2;
   const radius = center - strokeWidth;
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   childContainer: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     alignItems: 'center',
     justifyContent: 'center',
   },

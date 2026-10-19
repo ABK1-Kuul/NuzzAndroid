@@ -1,36 +1,28 @@
-import { darkColors, lightColors, ColorTheme } from './colors';
+// src/theme/index.ts
+import { colors, Colors, ColorKey, avatarPalette } from './colors';
 import { spacing, Spacing } from './spacing';
 import { radius, Radius } from './radius';
 import { typography, Typography } from './typography';
-import { useColorScheme } from 'react-native';
+import { shadows, Shadows } from './shadows';
 
 export interface Theme {
-  colors: ColorTheme;
+  colors: Colors;
   spacing: Spacing;
   radius: Radius;
   typography: Typography;
-  isDark: boolean;
+  shadows: Shadows;
 }
 
-export const defaultTheme: Theme = {
-  colors: darkColors,
+export const theme: Theme = {
+  colors,
   spacing,
   radius,
   typography,
-  isDark: true,
+  shadows,
 };
 
 export function useTheme(): Theme {
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme !== 'light';
-
-  return {
-    colors: isDark ? darkColors : lightColors,
-    spacing,
-    radius,
-    typography,
-    isDark,
-  };
+  return theme;
 }
 
-export { darkColors, lightColors, spacing, radius, typography };
+export { colors, Colors, ColorKey, avatarPalette, spacing, radius, typography, shadows };

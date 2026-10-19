@@ -1,12 +1,16 @@
+// src/theme/radius.ts
+// Radius tokens: cards ~20-24px, pills fully rounded
+
 export const radius = {
   none: 0,
   xs: 4,
   sm: 8,
   md: 12,
   lg: 16,
-  xl: 20,
-  xxl: 24,
-  full: 9999, // Pill buttons, circular avatars, round icons
+  card: 20,
+  xl: 24,
+  pill: 9999,
 } as const;
 
 export type Radius = typeof radius;
+export type RadiusKey = keyof Radius;

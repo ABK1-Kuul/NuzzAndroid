@@ -2,33 +2,34 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useTheme } from '../theme';
 
-interface StreakBadgeProps {
-  days: number;
+export interface StreakBadgeProps {
+  count: number;
   size?: 'sm' | 'md' | 'lg';
+  suffix?: string;
 }
 
-export function StreakBadge({ days, size = 'md' }: StreakBadgeProps) {
+export function StreakBadge({ count, size = 'md', suffix = '' }: StreakBadgeProps) {
   const { colors, spacing, radius, typography } = useTheme();
 
   const isSmall = size === 'sm';
   const isLarge = size === 'lg';
 
-  const paddingVertical = isSmall ? spacing.xxs : isLarge ? spacing.sm : spacing.xs;
+  const paddingVertical = isSmall ? 2 : isLarge ? spacing.sm : spacing.xs;
   const paddingHorizontal = isSmall ? spacing.xs : isLarge ? spacing.md : spacing.sm;
   const fontSize = isSmall
-    ? typography.fontSizes.caption
+    ? typography.fontSize.xs
     : isLarge
-    ? typography.fontSizes.subtitle
-    : typography.fontSizes.bodySm;
+    ? typography.fontSize.base
+    : typography.fontSize.sm;
 
   return (
     <View
       style={[
         styles.badge,
         {
-          backgroundColor: colors.surfaceSecondary,
-          borderColor: colors.streakFire,
-          borderRadius: radius.full,
+          backgroundColor: colors.surfaceAlt,
+          borderColor: colors.border,
+          borderRadius: radius.pill,
           paddingVertical,
           paddingHorizontal,
         },
@@ -39,14 +40,15 @@ export function StreakBadge({ days, size = 'md' }: StreakBadgeProps) {
         style={[
           styles.text,
           {
-            color: colors.streakFire,
+            color: colors.streak,
             fontSize,
-            fontWeight: typography.fontWeights.bold,
-            marginLeft: spacing.xxs,
+            fontFamily: typography.fontFamily.bold,
+            marginLeft: 2,
           },
         ]}
       >
-        {days}d
+        {count}
+        {suffix}
       </Text>
     </View>
   );

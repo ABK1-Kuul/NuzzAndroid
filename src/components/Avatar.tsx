@@ -1,82 +1,115 @@
 import React from 'react';
-import { View, Image, StyleSheet, Text } from 'react-native';
-import { useTheme } from '../theme';
+import { View, Text, StyleSheet } from 'react-native';
+import { useTheme, avatarPalette } from '../theme';
 
-interface AvatarProps {
-  url?: string;
-  name?: string;
-  size?: number;
-  showRing?: boolean;
-  ringColor?: string;
+export interface AvatarProps {
+  name: string;
+  color?: string;
+  size?: 'sm' | 'md' | 'lg' | number;
+  isOnline?: boolean;
+}
+
+function getInitials(name: string): string {
+  const parts = name.trim().split(/\s+/);
+  if (parts.length === 0 || !parts[0]) return 'U';
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+
+function getDeterministicColor(name: string): string {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const index = Math.abs(hash) % avatarPalette.length;
+  return avatarPalette[index];
 }
 
 export function Avatar({
-  url,
   name,
-  size = 40,
-  showRing = false,
-  ringColor,
+  color,
+  size = 'md',
+  isOnline = false,
 }: AvatarProps) {
   const { colors, radius, typography } = useTheme();
 
-  const initials = name
-    ? name
-        .split(' ')
-        .map((n) => n[0])
-        .join('')
-        .toUpperCase()
-        .slice(0, 2)
-    : 'U';
+  const dimension =
+    typeof size === 'number'
+      ? size
+      : size === 'sm'
+      ? 32
+      : size === 'lg'
+      ? 48
+      : 40;
 
-  const ringStyle = showRing
-    ? {
-        borderWidth: 2,
-        borderColor: ringColor || colors.brandPrimary,
-        padding: 2,
-      }
-    : null;
+  const backgroundColor = color || getDeterministicColor(name);
+  const initials = getInitials(name);
+  const fontSize = dimension * 0.4;
+  const dotSize = Math.max(8, Math.round(dimension * 0.25));
 
   return (
-    <View
-      style={[
-        styles.container,
-        {
-          width: size,
-          height: size,
-          borderRadius: radius.full,
-          backgroundColor: colors.surfaceSecondary,
-        },
-        ringStyle,
-      ]}
-    >
-      {url ? (
-        <Image
-          source={{ uri: url }}
-          style={{
-            width: '100%',
-            height: '100%',
-            borderRadius: radius.full,
-          }}
-        />
-      ) : (
+    <View style={[styles.wrapper, { width: dimension, height: dimension }]}>
+      <View
+        style={[
+          styles.circle,
+          {
+            width: dimension,
+            height: dimension,
+            borderRadius: radius.pill,
+            backgroundColor,
+          },
+        ]}
+      >
         <Text
-          style={{
-            color: colors.textPrimary,
-            fontSize: size * 0.4,
-            fontWeight: typography.fontWeights.semiBold,
-          }}
+          style={[
+            styles.initials,
+            {
+              fontSize,
+              color: colors.text,
+              fontFamily: typography.fontFamily.bold,
+            },
+          ]}
         >
           {initials}
         </Text>
-      )}
+      </View>
+      {isOnline ? (
+        <View
+          style={[
+            styles.presenceDot,
+            {
+              width: dotSize,
+              height: dotSize,
+              borderRadius: radius.pill,
+              backgroundColor: colors.accent,
+              borderColor: colors.bg,
+            },
+          ]}
+        />
+      ) : null}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  wrapper: {
+    position: 'relative',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  circle: {
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
+  },
+  initials: {
+    textAlign: 'center',
+    includeFontPadding: false,
+  },
+  presenceDot: {
+    position: 'absolute',
+    bottom: -1,
+    right: -1,
+    borderWidth: 2,
   },
 });

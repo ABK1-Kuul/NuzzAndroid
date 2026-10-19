@@ -1,19 +1,20 @@
 import React from 'react';
 import {
-  TouchableOpacity,
+  Pressable,
   Text,
   StyleSheet,
   ActivityIndicator,
   ViewStyle,
   TextStyle,
   StyleProp,
+  View,
 } from 'react-native';
 import { useTheme } from '../theme';
 
-interface ButtonProps {
+export interface ButtonProps {
   title: string;
   onPress: () => void;
-  variant?: 'primary' | 'secondary' | 'danger' | 'ghost';
+  variant?: 'primary' | 'secondary' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
   loading?: boolean;
   disabled?: boolean;
@@ -33,21 +34,11 @@ export function Button({
   textStyle,
   icon,
 }: ButtonProps) {
-  const { colors, spacing, radius, typography } = useTheme();
+  const { colors, spacing, radius, typography, shadows } = useTheme();
 
-  let bg = colors.brandPrimary;
-  let textCol = colors.textInverse;
-
-  if (variant === 'secondary') {
-    bg = colors.surfaceSecondary;
-    textCol = colors.textPrimary;
-  } else if (variant === 'danger') {
-    bg = colors.statusError;
-    textCol = colors.textPrimary;
-  } else if (variant === 'ghost') {
-    bg = 'transparent';
-    textCol = colors.textSecondary;
-  }
+  const isPrimary = variant === 'primary';
+  const isSecondary = variant === 'secondary';
+  const isGhost = variant === 'ghost';
 
   const paddingVertical =
     size === 'sm' ? spacing.xs : size === 'lg' ? spacing.lg : spacing.md;
@@ -55,55 +46,77 @@ export function Button({
     size === 'sm' ? spacing.md : size === 'lg' ? spacing.xxl : spacing.lg;
   const fontSize =
     size === 'sm'
-      ? typography.fontSizes.bodySm
+      ? typography.fontSize.sm
       : size === 'lg'
-      ? typography.fontSizes.subtitle
-      : typography.fontSizes.body;
+      ? typography.fontSize.md
+      : typography.fontSize.base;
+
+  const textColor = isPrimary
+    ? colors.accentText
+    : isGhost
+    ? colors.textMuted
+    : colors.text;
 
   return (
-    <TouchableOpacity
-      activeOpacity={0.8}
+    <Pressable
       onPress={onPress}
       disabled={disabled || loading}
-      style={[
-        styles.button,
+      style={({ pressed }) => [
+        styles.base,
         {
-          backgroundColor: bg,
-          borderRadius: radius.full,
+          borderRadius: radius.pill,
           paddingVertical,
           paddingHorizontal,
           opacity: disabled ? 0.5 : 1,
+        },
+        isPrimary && {
+          backgroundColor: colors.accent,
+          ...(pressed ? {} : shadows.buttonPrimaryEdge),
+          transform: [{ translateY: pressed ? 2 : 0 }],
+        },
+        isSecondary && {
+          backgroundColor: pressed ? colors.surface : colors.surfaceAlt,
+          borderWidth: 1,
+          borderColor: colors.border,
+        },
+        isGhost && {
+          backgroundColor: pressed ? colors.surfaceAlt : 'transparent',
         },
         style,
       ]}
     >
       {loading ? (
-        <ActivityIndicator color={textCol} size="small" />
+        <ActivityIndicator color={textColor} size="small" />
       ) : (
-        <>
-          {icon}
+        <View style={styles.content}>
+          {icon ? <View style={{ marginRight: spacing.xs }}>{icon}</View> : null}
           <Text
             style={[
               styles.text,
               {
-                color: textCol,
+                color: textColor,
                 fontSize,
-                fontWeight: typography.fontWeights.semiBold,
-                marginLeft: icon ? spacing.xs : 0,
+                fontFamily: isPrimary
+                  ? typography.fontFamily.bold
+                  : typography.fontFamily.medium,
               },
               textStyle,
             ]}
           >
             {title}
           </Text>
-        </>
+        </View>
       )}
-    </TouchableOpacity>
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
-  button: {
+  base: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  content: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',

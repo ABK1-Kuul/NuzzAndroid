@@ -1,4 +1,6 @@
-// 8-point grid with 4-point micro-adjustments
+// src/theme/spacing.ts
+// 4-point spacing scale
+
 export const spacing = {
   none: 0,
   xxs: 2,
@@ -15,3 +17,4 @@ export const spacing = {
 } as const;
 
 export type Spacing = typeof spacing;
+export type SpacingKey = keyof Spacing;
